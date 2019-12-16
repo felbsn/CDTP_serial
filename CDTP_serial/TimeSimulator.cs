@@ -12,6 +12,7 @@ namespace CDTP_serial
     class TimeSimulator
     {
         DatePicker targetDate;
+        Calendar calendar;
         DispatcherTimer dispatcherTimer;
         int intervalSeconds = 1;
         DateTime current;
@@ -26,7 +27,7 @@ namespace CDTP_serial
             }
         }
 
-        public TimeSimulator(DatePicker targetDate)
+        public TimeSimulator(DatePicker targetDate ,Calendar calendar = null)
         {
             this.targetDate = targetDate;
             dispatcherTimer = new DispatcherTimer()
@@ -34,21 +35,34 @@ namespace CDTP_serial
                 Interval = new TimeSpan(0, 0, 0, intervalSeconds, 0)
             };
 
+            this.calendar = calendar;
             dispatcherTimer.Tick += (s, e) =>
             {
                 Tick?.Invoke();
                 current = targetDate.SelectedDate.Value.AddDays(1);
                 targetDate.SelectedDate = current;
-          
+                if(this.calendar != null)
+                {
+                    this.calendar.SelectionMode = CalendarSelectionMode.SingleDate;
+                    this.calendar.DisplayDate = current;
+                    this.calendar.SelectedDate = current;
+
+                }
+                
             };
+
+          
         }
         public void Start()
         {
             dispatcherTimer.Start();
+            targetDate.IsEnabled = false;
+            
         }
         public void Stop()
         {
             dispatcherTimer.Stop();
+            targetDate.IsEnabled = true;
         }
         public bool isEnabled { get=> dispatcherTimer.IsEnabled; }
     }

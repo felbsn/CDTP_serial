@@ -14,7 +14,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <Grid >
+        <Grid   >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -22,7 +22,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <Grid   >
+            <Grid  Margin="10 0" >
                 
                 
 
@@ -35,7 +35,7 @@
 
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" Margin="5">
+                <StackPanel Grid.Column="0" >
                     <Label  Content="Com Port"/>
 
                     <DockPanel  LastChildFill="True">
@@ -45,7 +45,7 @@
 
                 </StackPanel>
 
-                <StackPanel Grid.Column="1"  Margin="5">
+                <StackPanel Grid.Column="1"  Margin="10 0 0 0">
                     <Label  Content="Baud Rate" />
                     <ComboBox x:Name="baudRateComboBox" >
                         <ComboBoxItem>300</ComboBoxItem>
@@ -65,7 +65,7 @@
                     </ComboBox>
                 </StackPanel>
 
-                <StackPanel Grid.Column="2"  Margin="5">
+                <StackPanel Grid.Column="2"   Margin="10 0 0 0">
                     <StackPanel  Orientation="Horizontal" >
                         <Label  Content="Status:"/>
                         <Label   x:Name="statusText" Foreground="Gray"  Content="Not Connected"/>
@@ -76,8 +76,8 @@
 
             </Grid>
 
-            <Border Grid.Row="1" BorderBrush="Gray" CornerRadius="20"  Margin="10">
-                <Grid >
+            <Border Grid.Row="1" BorderBrush="Gray" CornerRadius="2" BorderThickness="1"  Margin="10">
+                <Grid Margin="1">
                
                     <RichTextBox   x:Name="richTextBox"  IsReadOnly="True"  ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="14">
 
@@ -88,8 +88,8 @@
             </Grid>
             </Border>
 
-            <Border Grid.Row="2" BorderBrush="Gray" CornerRadius="20" Margin="10">
-                <Grid >
+            <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1" CornerRadius="2" Margin="10 0 10 10">
+                <Grid Margin="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
@@ -110,7 +110,7 @@
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
 
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="2" Margin="10">
 
             <StackPanel >
 
@@ -120,8 +120,13 @@
                     <Slider  Minimum="1" Maximum="20" Value="1" Margin="3 3"  x:Name="dateSlider" ValueChanged="dateSlider_ValueChanged"/>
                 </StackPanel>
 
-                <Button Content="Start" x:Name="toggleSimulation" Click="toggleSimulation_Click"/>
+                <Border BorderThickness="1" CornerRadius="2" Margin="10" BorderBrush="Gray">
+                    <Button Content="Start" x:Name="toggleSimulation" Click="toggleSimulation_Click" Margin="2" />
+                </Border>
                 
+                
+                <Calendar   x:Name="calender" />
+
 
             </StackPanel>
             

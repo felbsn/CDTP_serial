@@ -36,7 +36,7 @@ namespace CDTP_serial
             InitializeComponent();
             RefleshPortNames();
 
-            timeSimulator = new TimeSimulator(currentdate);
+            timeSimulator = new TimeSimulator(currentdate , calender);
             sp = new SerialPort();
 
             connection = new NpgsqlConnection();
@@ -58,6 +58,7 @@ namespace CDTP_serial
             {
                 if(sp.IsOpen)
                 {
+                    log("Simulator time:"+ timeSimulator.Today.ToLongDateString(), LogModality.Info);
                     sp.WriteLine("getValues");
 
                 }
@@ -298,6 +299,8 @@ namespace CDTP_serial
         {
             if(timeSimulator.isEnabled)
             {
+               
+
                 timeSimulator.Stop();
                 (sender as Button).Content = "Start";
             }
