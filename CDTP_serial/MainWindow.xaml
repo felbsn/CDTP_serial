@@ -1,0 +1,132 @@
+﻿<Window x:Class="CDTP_serial.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CDTP_serial"
+        mc:Ignorable="d"
+        Title="CDTP Serial Connector" Height="450" Width="800">
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5px"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid >
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid   >
+                
+                
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+ 
+ 
+
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="5">
+                    <Label  Content="Com Port"/>
+
+                    <DockPanel  LastChildFill="True">
+                        <Button x:Name="refleshPortNames"  Content="O" Margin="3 ,0 " Click="refleshPortNames_Click" ></Button>
+                        <ComboBox  x:Name="comPortComboBox"/>
+                    </DockPanel>
+
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"  Margin="5">
+                    <Label  Content="Baud Rate" />
+                    <ComboBox x:Name="baudRateComboBox" >
+                        <ComboBoxItem>300</ComboBoxItem>
+                        <ComboBoxItem>600</ComboBoxItem>
+                        <ComboBoxItem>1200</ComboBoxItem>
+                        <ComboBoxItem>2400</ComboBoxItem>
+                        <ComboBoxItem>4800</ComboBoxItem>
+                        <ComboBoxItem IsSelected="True">9600</ComboBoxItem>
+                        <ComboBoxItem>19200</ComboBoxItem>
+                        <ComboBoxItem>38400</ComboBoxItem>
+                        <ComboBoxItem>57600</ComboBoxItem>
+                        <ComboBoxItem>115200</ComboBoxItem>
+                        <ComboBoxItem>230400</ComboBoxItem>
+                        <ComboBoxItem>460800</ComboBoxItem>
+                        <ComboBoxItem>921600</ComboBoxItem>
+
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2"  Margin="5">
+                    <StackPanel  Orientation="Horizontal" >
+                        <Label  Content="Status:"/>
+                        <Label   x:Name="statusText" Foreground="Gray"  Content="Not Connected"/>
+                    </StackPanel>
+
+                    <Button Padding="2"  x:Name="connectButton" Content="Connect" Click="connectButton_Click"/>
+                </StackPanel>
+
+            </Grid>
+
+            <Border Grid.Row="1" BorderBrush="Gray" CornerRadius="20"  Margin="10">
+                <Grid >
+               
+                    <RichTextBox   x:Name="richTextBox"  IsReadOnly="True"  ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="14">
+
+                    </RichTextBox>
+
+                
+
+            </Grid>
+            </Border>
+
+            <Border Grid.Row="2" BorderBrush="Gray" CornerRadius="20" Margin="10">
+                <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                    <TextBox x:Name="inputTextBox" Keyboard.KeyDown="inputTextBox_KeyDown"/>
+
+                    <Button x:Name="sendButton"  Grid.Column="1" Content="Send" HorizontalAlignment="Left" Width="31" Click="sendButton_Click" />
+               
+
+            </Grid>
+            </Border>
+
+
+
+        </Grid>
+
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+
+
+        <Grid Grid.Column="2">
+
+            <StackPanel >
+
+                <DatePicker x:Name="currentdate" SelectedDate="1/10/2000"/>
+                <StackPanel>
+                    <Label x:Name="simulationSpeedLabel" Content="Simulation Speed (1 seconds)"></Label>
+                    <Slider  Minimum="1" Maximum="20" Value="1" Margin="3 3"  x:Name="dateSlider" ValueChanged="dateSlider_ValueChanged"/>
+                </StackPanel>
+
+                <Button Content="Start" x:Name="toggleSimulation" Click="toggleSimulation_Click"/>
+                
+
+            </StackPanel>
+            
+            
+        </Grid>
+
+    </Grid>
+</Window>
