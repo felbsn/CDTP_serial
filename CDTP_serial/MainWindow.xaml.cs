@@ -40,19 +40,9 @@ namespace CDTP_serial
             sp = new SerialPort();
 
             connection = new NpgsqlConnection();
-            connection.ConnectionString = "Server=127.0.0.1;Database=CDTP;User Id=postgres;Password=o; ";
-            connection.Open();
 
 
-            NpgsqlCommand cmd = new NpgsqlCommand("select city from cities", connection);
-
-           // cmd.Parameters.Add("", NpgsqlTypes.NpgsqlDbType.Integer,  );
-
-
-            if (connection.State == System.Data.ConnectionState.Open)
-            {
-                 
-            }
+ 
 
             timeSimulator.Tick += () =>
             {
@@ -193,10 +183,10 @@ namespace CDTP_serial
             foreach( var line in lines)
             {
                 if(string.IsNullOrEmpty(line)) continue;
-                //if (line == "\r") return;
-                log("Data Received: " + line, LogModality.Inbound);
 
-                
+                log("Data Received: " + line.TrimEnd('\n'), LogModality.Inbound);
+
+
 
                 // get data as   id;energyUsage;freeEnergyUsage;
                 var values = line.Split(',');
@@ -209,7 +199,8 @@ namespace CDTP_serial
                 // calculate cost
                 double cost = 0;
 
- 
+                if(connection.State == System.Data.ConnectionState.Open)
+                { 
                 using (var cmd = new NpgsqlCommand("INSERT INTO public.usage( \"userId\", \"timestamp\", \"energyUsage\", \"freeEnergyUsage\", \"cost\", \"subid\")VALUES(@userId, @timestamp, @energyUsage, @freeEnergyUsage, @cost, @subid)", connection))
                 {
                     cmd.Parameters.AddWithValue("userId", 0);
@@ -223,6 +214,10 @@ namespace CDTP_serial
                     {
                         log("SQL insert Error , subid:" + id , LogModality.Error );
                     }
+                }
+                }else
+                {
+                    log("Sql connetion not available", LogModality.Error);
                 }
             }
 
@@ -318,9 +313,46 @@ namespace CDTP_serial
             if(timeSimulator != null)
             {
                 timeSimulator.IntervalSecs = (int)e.NewValue;
-                simulationSpeedLabel.Content = string.Format("Simulation Speed({0} seconds)", timeSimulator.IntervalSecs);
+                simulationSpeedLabel.Content = string.Format("Simulation Speed(1 day = {0} seconds)", timeSimulator.IntervalSecs);
             }
-            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(connection.State == System.Data.ConnectionState.Open)
+            {
+                connection.Close();
+                log("Sql connection closed.", LogModality.Info);
+
+
+                sqlusernameTextBox.IsEnabled = true;
+                sqlpasswordTextBox.IsEnabled = true;
+                sqlConnectLabel.Content = "Connect";
+                sqlConnectLabel.Foreground = Brushes.Black;
+            }
+            else
+            {
+                connection.ConnectionString = string.Format("Server=127.0.0.1;Database=CDTP;User Id={0};Password={1}; " , sqlusernameTextBox.Text, sqlpasswordTextBox.Text);
+                try
+                {
+                    connection.Open();
+
+                }
+                catch (Exception ex)
+                {
+
+                    //MessageBox.Show( ex.Message,"Connection Error");
+                    log("Can not connect Sql, " + ex.Message, LogModality.Error);
+                    sqlConnectLabel.Content = "Can not connect, try again";
+                    sqlConnectLabel.Foreground = Brushes.Red;
+ 
+                    return;
+                }
+                sqlConnectLabel.Content = "Connected";
+                sqlConnectLabel.Foreground = Brushes.Green;
+                sqlusernameTextBox.IsEnabled = false;
+                sqlpasswordTextBox.IsEnabled = false;
+            }
         }
     }
 }

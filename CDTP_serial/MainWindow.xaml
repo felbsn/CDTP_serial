@@ -110,13 +110,40 @@
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
 
-        <Grid Grid.Column="2" Margin="10">
+        <Grid Grid.Column="2" >
 
-            <StackPanel >
+            <ScrollViewer>
+
+                <StackPanel Margin="10" >
+
+                <Label  Content="Sql options"/>
+
+                <Grid Margin="0 0 0 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="username"/>
+                    <TextBox x:Name="sqlusernameTextBox"  Grid.Row="0" Grid.Column="1" Text="postgres" VerticalAlignment="Center" />
+                    <Label  Grid.Row="1" Grid.Column="0" Content="password"  />
+                    <TextBox  x:Name="sqlpasswordTextBox" Grid.Row="1" Grid.Column="1" Text="o"  VerticalAlignment="Center"  />
+
+                    <Button  Grid.Row ="2" Grid.ColumnSpan ="2" Click="Button_Click">
+                        <Label x:Name="sqlConnectLabel" Content="Connect to Sql"/>
+                    </Button>
+                </Grid >
+
+
 
                 <DatePicker x:Name="currentdate" SelectedDate="1/10/2000"/>
                 <StackPanel>
-                    <Label x:Name="simulationSpeedLabel" Content="Simulation Speed (1 seconds)"></Label>
+                        <Label x:Name="simulationSpeedLabel" Content="Simulation Speed(1 day = 1 seconds)"></Label>
                     <Slider  Minimum="1" Maximum="20" Value="1" Margin="3 3"  x:Name="dateSlider" ValueChanged="dateSlider_ValueChanged"/>
                 </StackPanel>
 
@@ -129,8 +156,8 @@
 
 
             </StackPanel>
-            
-            
+
+            </ScrollViewer>
         </Grid>
 
     </Grid>
