@@ -28,9 +28,6 @@ namespace CDTP_serial
         SerialPort sp;
         TimeSimulator timeSimulator;
 
-
-   
-
         public MainWindow()
         {
             InitializeComponent();
@@ -128,8 +125,6 @@ namespace CDTP_serial
 
                 log("Trying to connect on port " + comName + " : " + baudRate  , LogModality.Info);
 
-
-               
                 sp.PortName = comName;
                 sp.BaudRate = baudRate;
                 sp.ReceivedBytesThreshold = 1;
@@ -176,7 +171,7 @@ namespace CDTP_serial
 
         private void Sp_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            var read = sp.ReadTo("\r\n");
+            var read = sp.ReadTo("\n");
 
             var lines = read.Split(';');
 
@@ -197,22 +192,21 @@ namespace CDTP_serial
                 var freeEnergyUsage = double.Parse(values[2]);
 
                 // calculate cost
-                double cost = 0;
+                double cost = (energyUsage-freeEnergyUsage) * 1.0f;
 
                 if(connection.State == System.Data.ConnectionState.Open)
                 { 
-                using (var cmd = new NpgsqlCommand("INSERT INTO public.usage( \"userId\", \"timestamp\", \"energyUsage\", \"freeEnergyUsage\", \"cost\", \"subid\")VALUES(@userId, @timestamp, @energyUsage, @freeEnergyUsage, @cost, @subid)", connection))
+                using (var cmd = new NpgsqlCommand("INSERT INTO public.usage( timestamp, energyusage, freeusage, cost, deviceid)VALUES( @timestamp, @energyUsage, @freeEnergyUsage, @cost, @deviceid)", connection))
                 {
-                    cmd.Parameters.AddWithValue("userId", 0);
                     cmd.Parameters.AddWithValue("timestamp", timeSimulator.Today);
                     cmd.Parameters.AddWithValue("energyUsage", energyUsage);
                     cmd.Parameters.AddWithValue("freeEnergyUsage", freeEnergyUsage);
                     cmd.Parameters.AddWithValue("cost", cost);
-                    cmd.Parameters.AddWithValue("subid", id);
+                    cmd.Parameters.AddWithValue("deviceid", id);
                     int res =  cmd.ExecuteNonQuery();
                     if(res == 0)
                     {
-                        log("SQL insert Error , subid:" + id , LogModality.Error );
+                        log("SQL insert Error , deviceid:" + id , LogModality.Error );
                     }
                 }
                 }else
@@ -348,6 +342,7 @@ namespace CDTP_serial
  
                     return;
                 }
+                log("Sql connection opened.", LogModality.Info);
                 sqlConnectLabel.Content = "Connected";
                 sqlConnectLabel.Foreground = Brushes.Green;
                 sqlusernameTextBox.IsEnabled = false;
