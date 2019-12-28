@@ -38,16 +38,18 @@ namespace CDTP_serial
             this.calendar = calendar;
             dispatcherTimer.Tick += (s, e) =>
             {
-                Tick?.Invoke();
                 current = targetDate.SelectedDate.Value.AddDays(1);
                 targetDate.SelectedDate = current;
-                if(this.calendar != null)
+                if (this.calendar != null)
                 {
                     this.calendar.SelectionMode = CalendarSelectionMode.SingleDate;
                     this.calendar.DisplayDate = current;
                     this.calendar.SelectedDate = current;
 
                 }
+
+                Tick?.Invoke();
+
                 
             };
 
